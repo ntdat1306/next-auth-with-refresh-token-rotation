@@ -1,0 +1,20 @@
+.card {
+    flex: 1;
+    max-width: 28rem;
+
+    .submit {
+        margin-bottom: 0;
+
+        .btn {
+            width: 100%;
+        }
+    }
+
+    .lastItem {
+        margin-bottom: 0;
+    }
+
+    .link {
+        color: var(--ant-blue) !important;
+    }
+}

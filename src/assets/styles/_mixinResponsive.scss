@@ -1,0 +1,39 @@
+// Desktop first
+
+$largeDesktop: 1536px;
+$desktop: 1280px;
+$tablet: 1024px;
+$landscapePhone: 768px;
+$portraitPhone: 640px;
+
+@mixin responsive($breakpoint) {
+    @if $breakpoint == largeDesktop {
+        @media screen and (max-width: $largeDesktop) {
+            @content;
+        }
+    }
+
+    @if $breakpoint == desktop {
+        @media screen and (max-width: $desktop) {
+            @content;
+        }
+    }
+
+    @if $breakpoint == tablet {
+        @media screen and (max-width: $tablet) {
+            @content;
+        }
+    }
+
+    @if $breakpoint == landscapePhone {
+        @media screen and (max-width: $landscapePhone) {
+            @content;
+        }
+    }
+
+    @if $breakpoint == portraitPhone {
+        @media screen and (max-width: $portraitPhone) {
+            @content;
+        }
+    }
+}

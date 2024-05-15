@@ -9,16 +9,26 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "next": "14.2.3",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.3"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@ant-design/nextjs-registry": "^1.0.0",
+    "@prisma/client": "^5.14.0",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "antd": "^5.17.2",
+    "axios": "^1.6.8",
     "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "eslint-config-next": "14.2.3",
+    "jsonwebtoken": "^9.0.2",
+    "next-auth": "^5.0.0-beta.18",
+    "prisma": "^5.14.0",
+    "sass": "^1.77.1",
+    "typescript": "^5",
+    "zod": "^3.23.8"
   }
 }

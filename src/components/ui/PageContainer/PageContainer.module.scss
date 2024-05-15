@@ -1,0 +1,23 @@
+@use '@/assets/styles/mixinPadding' as *;
+
+.container {
+    @include padding;
+
+    &.vertical {
+        display: flex;
+        align-items: center;
+    }
+
+    &.horizontal {
+        display: flex;
+        justify-content: center;
+    }
+
+    &.both {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    min-height: 100vh;
+}

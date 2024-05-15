@@ -1,0 +1,26 @@
+@use '@/assets/styles/variables' as *;
+@use '@/assets/styles/mixinResponsive' as *;
+
+@mixin padding {
+    padding: $padding;
+
+    @include responsive(largeDesktop) {
+        padding: $padding-large-desktop;
+    }
+
+    @include responsive(desktop) {
+        padding: $padding-desktop;
+    }
+
+    @include responsive(tablet) {
+        padding: $padding-tablet;
+    }
+
+    @include responsive(landscapePhone) {
+        padding: $padding-landscape-phone;
+    }
+
+    @include responsive(portraitPhone) {
+        padding: $padding-portrait-phone;
+    }
+}
