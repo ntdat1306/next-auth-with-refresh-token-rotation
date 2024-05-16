@@ -33,6 +33,10 @@
   </a>
 </p>
 
+## 🌵 Workflow
+
+<img src="./src/assets/workflow/workflow.png">
+
 ## 🌵 How to use
 
 ```bash
