@@ -11,7 +11,8 @@ const { Countdown } = Statistic;
 const SessionPreview = () => {
     const { message } = AntdApp.useApp();
     const { data: session } = useSession();
-    const refreshTime = session?.user && session?.user.expiresAt * 1000;
+    const refreshTime = session?.user && session?.user.accessTokenExpiresAt * 1000;
+    const refreshTokenExpiresAt = session?.user && session?.user.refreshTokenExpiresAt * 1000;
 
     const handleLogOut = async () => {
         try {
@@ -34,6 +35,7 @@ const SessionPreview = () => {
                 <pre>{JSON.stringify(session, null, 2)}</pre>
             </Typography>
             <Countdown title='Access token will refresh in' value={refreshTime} />
+            <Countdown title='Refresh token will expired in' value={refreshTokenExpiresAt} />
         </Card>
     );
 };

@@ -1,4 +1,4 @@
-import { generateAccessToken, generateRefreshToken, verifyAccessToken } from '@/lib/jwt';
+import { generateAccessToken, generateRefreshToken, verifyAccessToken, verifyRefreshToken } from '@/lib/jwt';
 import prisma from '@/lib/prismaClient';
 import { signInSchema } from '@/lib/zod';
 import { NextRequest, NextResponse } from 'next/server';
@@ -28,23 +28,28 @@ export async function POST(request: NextRequest) {
                 { status: 404 }
             );
 
-        // Create data
+        // Create token
         const accessToken = generateAccessToken({ id: user.id });
         const refreshToken = generateRefreshToken({ id: user.id });
-        const accessTokenVerify = verifyAccessToken(accessToken);
-        const expiresAt = accessTokenVerify.exp;
 
-        if (!expiresAt)
+        const accessTokenVerify = verifyAccessToken(accessToken);
+        const refreshTokenVerify = verifyRefreshToken(refreshToken);
+
+        const accessTokenExpiresAt = accessTokenVerify.exp;
+        const refreshTokenExpiresAt = refreshTokenVerify.exp;
+
+        if (!accessTokenExpiresAt || !refreshTokenExpiresAt) {
             return NextResponse.json(
-                { status: 'fail', data: {}, message: 'Error when get `exp` of access token' },
+                { status: 'fail', data: {}, message: 'Error when get `exp` of access token or refresh token' },
                 { status: 404 }
             );
+        }
 
         // Add refresh token to DB
         await prisma.refreshToken.create({
             data: {
                 token: refreshToken,
-                expiresAt: expiresAt,
+                expiresAt: refreshTokenExpiresAt,
                 userId: user.id,
             },
         });
@@ -61,7 +66,14 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({
             status: 'success',
-            data: { id: user.id, role: user.role, accessToken, expiresAt, refreshToken },
+            data: {
+                id: user.id,
+                role: user.role,
+                accessToken,
+                refreshToken,
+                accessTokenExpiresAt,
+                refreshTokenExpiresAt,
+            },
             message: 'Login success',
         });
     } catch (error) {

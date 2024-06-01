@@ -13,47 +13,59 @@ export async function POST(request: NextRequest) {
     try {
         const refreshTokenDB = await prisma.refreshToken.findUnique({ where: { token: refreshToken } });
 
-        if (!refreshTokenDB)
+        if (!refreshTokenDB) {
             return NextResponse.json(
                 { status: 'fail', data: {}, message: 'Refresh token is not in DB' },
                 { status: 404 }
             );
+        }
 
         // Try-catch to validate token
         try {
-            const tokenVerify = verifyRefreshToken(refreshToken);
-            const userId = tokenVerify.id;
+            const refreshTokenVerify = verifyRefreshToken(refreshToken);
+            const userId = refreshTokenVerify.id;
 
-            if (!userId)
+            if (!userId) {
                 return NextResponse.json(
                     { status: 'fail', data: {}, message: 'Can not find `id` in payload of refresh token' },
                     { status: 404 }
                 );
+            }
 
             const user = await prisma.user.findUnique({
                 where: { id: userId },
             });
 
-            if (!user)
+            if (!user) {
                 return NextResponse.json(
                     { status: 'fail', data: {}, message: 'Can not find user in DB with refresh token' },
                     { status: 404 }
                 );
+            }
 
             // Generate new access token
             const accessToken = generateAccessToken({ id: user.id });
             const accessTokenVerify = verifyAccessToken(accessToken);
-            const expiresAt = accessTokenVerify.exp;
 
-            if (!expiresAt)
+            const accessTokenExpiresAt = accessTokenVerify.exp;
+            const refreshTokenExpiresAt = refreshTokenVerify.exp;
+
+            if (!accessTokenExpiresAt || !refreshTokenExpiresAt)
                 return NextResponse.json(
-                    { status: 'fail', data: {}, message: 'Error when get `exp` of new access token' },
+                    { status: 'fail', data: {}, message: 'Error when get `exp` of new access token or refresh token' },
                     { status: 404 }
                 );
 
             return NextResponse.json({
                 status: 'success',
-                data: { id: user.id, role: user.role, accessToken, expiresAt, refreshToken },
+                data: {
+                    id: user.id,
+                    role: user.role,
+                    accessToken,
+                    refreshToken,
+                    accessTokenExpiresAt,
+                    refreshTokenExpiresAt,
+                },
                 message: 'Refresh access token success',
             });
         } catch (error) {

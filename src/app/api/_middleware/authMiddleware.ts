@@ -9,11 +9,12 @@ const authMiddleware: Middleware = async (request, next) => {
     const authHeader = headersList.get('authorization');
 
     // Check if `authorization` not exist
-    if (!authHeader)
+    if (!authHeader) {
         return NextResponse.json(
             { status: 'fail', data: {}, message: 'Can not find `authorization` header' },
             { status: 404 }
         );
+    }
 
     // Check if `authorization` start with `Bearer`
     if (authHeader.startsWith('Bearer ')) {

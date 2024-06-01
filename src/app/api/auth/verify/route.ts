@@ -7,31 +7,34 @@ export async function POST(request: NextRequest) {
     const req = await request.json();
     const { accessToken } = req;
 
-    if (!accessToken)
+    if (!accessToken) {
         return NextResponse.json(
             { status: 'fail', data: {}, message: 'Can not find `accessToken` to verify' },
             { status: 404 }
         );
+    }
 
     try {
         const accessTokenVerify = verifyAccessToken(accessToken);
         const userId = accessTokenVerify.id;
 
-        if (!userId)
+        if (!userId) {
             return NextResponse.json(
                 { status: 'fail', data: {}, message: 'Can not find `id` in payload of access token' },
                 { status: 404 }
             );
+        }
 
         const user = await prisma.user.findUnique({
             where: { id: userId },
         });
 
-        if (!user)
+        if (!user) {
             return NextResponse.json(
                 { status: 'fail', data: {}, message: 'Can not find user in DB with access token' },
                 { status: 404 }
             );
+        }
 
         return NextResponse.json({ status: 'success', data: user, message: 'Verify access token success' });
     } catch (error) {

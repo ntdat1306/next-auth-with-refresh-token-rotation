@@ -6,8 +6,9 @@ interface UserType {
     id: string;
     role: Role;
     accessToken: string;
-    expiresAt: number;
     refreshToken: string;
+    accessTokenExpiresAt: number;
+    refreshTokenExpiresAt: number;
 }
 
 declare module 'next-auth' {

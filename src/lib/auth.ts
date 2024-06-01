@@ -79,8 +79,9 @@ export const authOptions: NextAuthConfig = {
                         id: session?.user.id,
                         role: session?.user.role,
                         accessToken: session?.user.accessToken,
-                        expiresAt: session?.user.expiresAt,
                         refreshToken: session?.user.refreshToken,
+                        accessTokenExpiresAt: session?.user.accessTokenExpiresAt,
+                        refreshTokenExpiresAt: session?.user.refreshTokenExpiresAt,
                     },
                 };
             }
@@ -89,7 +90,7 @@ export const authOptions: NextAuthConfig = {
                 // Save the access token and refresh token in the JWT on the initial login, as well as the user details
                 token.user = user as any;
                 return token;
-            } else if (token.user && Date.now() < token.user.expiresAt * 1000) {
+            } else if (token.user && Date.now() < token.user.accessTokenExpiresAt * 1000) {
                 // If the access token has not expired yet, return it
                 return token as any;
             } else {
@@ -117,8 +118,9 @@ export const authOptions: NextAuthConfig = {
                             id: resParse.data.id,
                             role: resParse.data.role,
                             accessToken: resParse.data.accessToken,
-                            expiresAt: resParse.data.expiresAt,
                             refreshToken: resParse.data.refreshToken,
+                            accessTokenExpiresAt: resParse.data.accessTokenExpiresAt,
+                            refreshTokenExpiresAt: resParse.data.refreshTokenExpiresAt,
                         },
                     };
                 } catch (error) {
