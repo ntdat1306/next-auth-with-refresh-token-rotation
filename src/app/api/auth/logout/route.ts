@@ -6,16 +6,18 @@ export async function POST(request: NextRequest) {
     const { refreshToken } = req;
 
     try {
-        if (!refreshToken)
+        if (!refreshToken) {
             return NextResponse.json({ status: 'fail', data: {}, message: 'Require refresh token' }, { status: 404 });
+        }
 
         const refreshTokenDB = await prisma.refreshToken.findUnique({ where: { token: refreshToken } });
-        
-        if (!refreshTokenDB)
+
+        if (!refreshTokenDB) {
             return NextResponse.json(
                 { status: 'fail', data: {}, message: 'Refresh token is not in DB' },
                 { status: 404 }
             );
+        }
 
         await prisma.refreshToken.delete({ where: { id: refreshTokenDB.id } });
 

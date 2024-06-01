@@ -7,8 +7,9 @@ export async function POST(request: NextRequest) {
     const req = await request.json();
     const { refreshToken } = req;
 
-    if (!refreshToken)
+    if (!refreshToken) {
         return NextResponse.json({ status: 'fail', data: {}, message: 'Require refresh token' }, { status: 404 });
+    }
 
     try {
         const refreshTokenDB = await prisma.refreshToken.findUnique({ where: { token: refreshToken } });
@@ -50,11 +51,12 @@ export async function POST(request: NextRequest) {
             const accessTokenExpiresAt = accessTokenVerify.exp;
             const refreshTokenExpiresAt = refreshTokenVerify.exp;
 
-            if (!accessTokenExpiresAt || !refreshTokenExpiresAt)
+            if (!accessTokenExpiresAt || !refreshTokenExpiresAt) {
                 return NextResponse.json(
                     { status: 'fail', data: {}, message: 'Error when get `exp` of new access token or refresh token' },
                     { status: 404 }
                 );
+            }
 
             return NextResponse.json({
                 status: 'success',

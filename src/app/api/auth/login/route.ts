@@ -9,11 +9,12 @@ export async function POST(request: NextRequest) {
     try {
         // Validate
         const result = signInSchema.safeParse(req);
-        if (!result.success)
+        if (!result.success) {
             return NextResponse.json(
                 { status: 'fail', data: {}, message: result.error.errors[0].message },
                 { status: 400 }
             );
+        }
 
         // Destructuring data if result success
         const { username, password } = result.data;
@@ -22,11 +23,12 @@ export async function POST(request: NextRequest) {
             where: { username: username },
         });
 
-        if (!user || user.password !== password)
+        if (!user || user.password !== password) {
             return NextResponse.json(
                 { status: 'fail', data: {}, message: 'Can not find user or password wrong' },
                 { status: 404 }
             );
+        }
 
         // Create token
         const accessToken = generateAccessToken({ id: user.id });

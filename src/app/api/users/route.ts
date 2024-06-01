@@ -44,11 +44,12 @@ export async function POST(request: NextRequest) {
             where: { username: username },
         });
 
-        if (user)
+        if (user) {
             return NextResponse.json(
                 { status: 'fail', data: {}, message: 'Username has already been taken' },
                 { status: 404 }
             );
+        }
 
         await prisma.user.create({
             data: { username, password, role },
