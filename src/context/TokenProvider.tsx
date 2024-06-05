@@ -23,8 +23,9 @@ const TokenProvider = (props: TokenProviderProps) => {
     // Auto logout when refresh token expired
     useEffect(() => {
         if (session?.error === 'RefreshAccessTokenError') {
-            message.loading('Logging out');
-            setTimeout(deleteCookies, 1000);
+            message.loading('Refresh token error, logging out');
+            // setTimeout(deleteCookies, 1000);
+            setTimeout(signOut, 1000);
         }
     }, [session?.error, message]);
 

@@ -12,17 +12,17 @@ interface UserType {
 }
 
 declare module 'next-auth' {
-    interface User extends UserType {}
+    // interface User extends UserType {}
 
     interface Session {
-        user?: UserType;
+        user: UserType;
         error?: 'RefreshAccessTokenError';
     }
 }
 
 declare module 'next-auth/jwt' {
     interface JWT {
-        user?: UserType;
+        user: UserType;
         error?: 'RefreshAccessTokenError';
     }
 }

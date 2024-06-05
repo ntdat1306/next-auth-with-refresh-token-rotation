@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthConfig } from 'next-auth';
+import NextAuth, { NextAuthConfig, User } from 'next-auth';
 import { signInSchema } from './zod';
 import Credentials from 'next-auth/providers/credentials';
 import { NextRequest } from 'next/server';
@@ -91,11 +91,12 @@ export const authOptions: NextAuthConfig = {
                 token.user = user as any;
                 return token;
             } else if (token.user && Date.now() < token.user.accessTokenExpiresAt * 1000) {
-                // If the access token has not expired yet, return it
+                // Subsequent logins, if the access token is still valid, return the JWT
                 return token as any;
             } else {
+                // Subsequent logins, if the access token has expired, try to refresh it
                 if (!token.user?.refreshToken) throw new Error('Missing refresh token');
-                // If the access token has expired, try to refresh it
+
                 try {
                     /**
                      * ! Can not use axios here, this cause error
@@ -124,7 +125,7 @@ export const authOptions: NextAuthConfig = {
                         },
                     };
                 } catch (error) {
-                    // The error property will be used client-side to handle the refresh token error
+                    // The error property can be used client-side to handle the refresh token error
                     return { ...token, error: 'RefreshAccessTokenError' as const };
                 }
             }
