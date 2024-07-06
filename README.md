@@ -44,7 +44,7 @@
 $ git clone https://link-to-project
 
 # Go into the repository
-$ cd next-auth-with-refresh-token-rotation
+$ cd project_name
 
 # Install dependencies
 $ yarn
